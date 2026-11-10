@@ -1,0 +1,243 @@
+/*
+ * The page around the editor. Everything inside .nme-root reads nethermark's
+ * theme tokens (--nme-*), so it follows the editor's light and dark themes.
+ * These rules are unlayered, so they win over the package's own `nme` layer.
+ */
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Shows only on overscroll and before the editor is built. Matches the themes' backgrounds. */
+body {
+  background: light-dark(#f6f5f2, #141516);
+}
+
+#app {
+  height: 100dvh;
+}
+
+/* Until main.ts has built the editor, the page's own parts stay out of sight. */
+#app > :not(.nme-root) {
+  display: none;
+}
+
+/* ---------- Frame: name, toolbar and help on top, the text, the status line ---------- */
+
+#app .nme-root {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr) 11rem;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "brand tools actions"
+    "editor editor editor"
+    "status status status";
+  height: 100%;
+  background: var(--nme-background);
+  color: var(--nme-foreground);
+  font-family: var(--nme-font-family);
+}
+
+.brand {
+  grid-area: brand;
+  align-self: center;
+  padding-inline-start: 20px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.actions {
+  grid-area: actions;
+  align-self: center;
+  justify-self: end;
+  padding-inline-end: 16px;
+}
+
+/* ---------- Toolbar: quiet until used, centered over the text column ---------- */
+
+#app .nme-toolbar {
+  grid-area: tools;
+  justify-content: safe center;
+  padding: 10px 8px;
+  background: transparent;
+  border-bottom: 0;
+  color: var(--nme-gutter-foreground);
+}
+
+#app .nme-more {
+  margin-inline-start: 0;
+}
+
+#app .nme-button:hover,
+#app .nme-button:focus-visible {
+  color: var(--nme-button-foreground);
+}
+
+#app .nme-separator {
+  margin-block: 6px;
+}
+
+#app .nme-menu {
+  color: var(--nme-button-foreground);
+  box-shadow: 0 14px 32px -14px rgb(0 0 0 / 40%);
+}
+
+#app .nme-tooltip {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.help-button {
+  padding: 7px 12px;
+  border: var(--nme-border-width) solid var(--nme-border);
+  border-radius: var(--nme-radius);
+  background: transparent;
+  color: var(--nme-gutter-foreground);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.help-button:hover {
+  background: var(--nme-button-hover);
+  color: var(--nme-button-foreground);
+}
+
+.help-button:focus-visible {
+  outline: var(--nme-focus-ring-width) solid var(--nme-focus-ring);
+  outline-offset: 2px;
+}
+
+.help {
+  position: fixed;
+  inset: 58px 16px auto auto;
+  width: min(23rem, calc(100vw - 32px));
+  margin: 0;
+  padding: 18px 20px;
+  border: var(--nme-border-width) solid var(--nme-border);
+  border-radius: 14px;
+  background: var(--nme-toolbar-background);
+  color: var(--nme-foreground);
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 45%);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.help h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--nme-heading);
+}
+
+.help p {
+  margin: 0 0 8px;
+}
+
+.help .help-note {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: var(--nme-border-width) solid var(--nme-border);
+  color: var(--nme-gutter-foreground);
+  font-size: 14px;
+}
+
+/* ---------- The text: one centered column of comfortable length ---------- */
+
+#app .cm-editor {
+  grid-area: editor;
+  min-height: 0;
+}
+
+/* The editor is the whole page, so the cursor shows where focus is. The toolbar keeps its rings. */
+#app .cm-editor.cm-focused {
+  outline: none;
+}
+
+#app .cm-scroller {
+  cursor: text;
+}
+
+#app .cm-content {
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-block: 36px 45vh;
+}
+
+/* The total under a sum lines up with the lines above it. */
+#app .cm-line,
+#app .st-total {
+  padding-inline: 28px;
+}
+
+#app .cm-line:is(.nme-line-h1, .nme-line-h2, .nme-line-h3) {
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Status line ---------- */
+
+.status {
+  grid-area: status;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 20px 10px;
+  color: var(--nme-gutter-foreground);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.status .is-problem {
+  color: var(--nme-foreground);
+  font-weight: 600;
+}
+
+/* ---------- Phones: the name and help on one row, the toolbar under them ---------- */
+
+@media (max-width: 760px) {
+  #app .nme-root {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand actions"
+      "tools tools"
+      "editor editor"
+      "status status";
+  }
+
+  .brand {
+    padding-block: 12px 2px;
+    padding-inline-start: 18px;
+  }
+
+  .actions {
+    padding-block: 10px 0;
+    padding-inline-end: 12px;
+  }
+
+  #app .nme-toolbar {
+    padding: 6px 10px;
+  }
+
+  #app .cm-content {
+    padding-block: 18px 45vh;
+  }
+
+  #app .cm-line,
+  #app .st-total {
+    padding-inline: 18px;
+  }
+
+  .status {
+    padding-inline: 18px;
+  }
+}

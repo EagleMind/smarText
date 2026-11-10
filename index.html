@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>smarText</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232b6a5b'/%3E%3Cpath d='M9 12.5h14M9 19.5h14' stroke='%23f6f5f2' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <!-- main.ts moves these around the editor once it's built. -->
+      <div class="brand">smarText</div>
+
+      <div class="actions">
+        <button class="help-button" type="button" popovertarget="help">How sums work</button>
+      </div>
+
+      <div id="help" class="help" popover>
+        <h2>How sums work</h2>
+        <p>Write a number with a unit, like 46g, 2 cups, 45 min, $12.50 or 20%. Amounts of the same kind add up.</p>
+        <p>Units mix: 1 kg and 500 g make 1.5 kg, and 2 cups and 100 ml make 2.42 cups.</p>
+        <p>Each amount shows its share, and the total appears under the last line.</p>
+        <p>To start a new sum, add a heading or a line without an amount.</p>
+        <p>Click a total to change it. Every amount in that sum is rescaled to match.</p>
+        <p class="help-note">
+          Understood: weight, volume, length, area, time, energy, power, data, pieces, money and percentages. Cups,
+          spoons, pints and gallons are US measures. Currencies are never exchanged, so dollars and euros add up
+          apart.
+        </p>
+      </div>
+
+      <footer class="status">
+        <span id="saved" role="status"></span>
+        <span id="words"></span>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
