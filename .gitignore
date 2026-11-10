@@ -1,2 +1,30 @@
-node_modules
-dist
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Cloudflare: local state and secrets for local runs
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Local settings and secrets. `.env` itself is kept: it only holds the site's public address.
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test output
+coverage/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code: personal settings stay local, the shared launch config is kept
+.claude/settings.local.json

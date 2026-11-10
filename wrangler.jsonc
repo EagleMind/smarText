@@ -2,10 +2,15 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "smartext",
   "compatibility_date": "2026-11-01",
-  // No Worker code: Cloudflare serves the built pages in dist/ as static assets.
+  // The Worker only answers Google's ownership check (see worker/index.js).
+  // Every other address is served straight from the built pages in dist/.
+  "main": "worker/index.js",
+  "rules": [{ "type": "Text", "globs": ["**/*.html"], "fallthrough": true }],
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/google*.html"]
   }
 }
