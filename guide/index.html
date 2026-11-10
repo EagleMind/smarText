@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How smarText adds up your notes: units, shares and totals</title>
+    <meta
+      name="description"
+      content="How smarText finds amounts in plain text, mixes units like kg and g or cups and ml, shows each amount's share, and rescales a recipe when you change its total."
+    />
+    <link rel="canonical" href="%VITE_SITE_URL%/guide/" />
+    <meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141516" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="smarText" />
+    <meta property="og:title" content="How smarText adds up your notes" />
+    <meta
+      property="og:description"
+      content="Amounts anywhere in your text, units that mix, a share for every amount, and totals you can change to rescale a recipe."
+    />
+    <meta property="og:url" content="%VITE_SITE_URL%/guide/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A line of text with two amounts, their shares and the total of 83 g" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "smarText", "item": "%VITE_SITE_URL%/" },
+              { "@type": "ListItem", "position": 2, "name": "Guide", "item": "%VITE_SITE_URL%/guide/" }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Do I need to learn formulas or a special syntax?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Write a number with a unit anywhere in a sentence, a list or a table. smarText finds the amounts and adds them up as you type."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I mix units such as kilograms and grams, or cups and milliliters?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Units of the same kind are converted and added together: 1 kg and 500 g make 1.5 kg, and 2 cups and 100 ml make 2.42 cups. Cups, spoons, pints and gallons are US measures."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I scale a recipe up or down?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Click the total, type the total you want and press Enter. Every amount in that sum is rewritten in proportion, each in its own unit, and one undo puts them all back."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does smarText change my text?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Not when it calculates. Shares and totals are drawn on top of the note and are not part of the Markdown. Your text changes only when you change a total yourself."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where is my note stored?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "In your browser, on your device. It is not sent to a server, and there is no account."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does it convert currencies?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Each currency is added up on its own, so dollars and euros get separate totals."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: light-dark(#f6f5f2, #141516);
+        --text: light-dark(#141516, #eeebe5);
+        --muted: light-dark(#6b6862, #a8a49c);
+        --edge: light-dark(#e3dfd8, rgb(238 235 229 / 12%));
+        --panel: light-dark(#efece6, #1c1d1f);
+        --accent: light-dark(#2b6a5b, #8fd1be);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 17px/1.7 "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      a { color: var(--accent); text-underline-offset: 3px; }
+      a:focus-visible, .open:focus-visible { outline: 2px solid #4fa38e; outline-offset: 3px; border-radius: 4px; }
+      .top {
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        padding: 14px 20px;
+      }
+      .brand { color: var(--text); font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+      .open {
+        padding: 8px 14px; border-radius: 8px; background: var(--accent); color: var(--bg);
+        font-weight: 600; font-size: 15px; text-decoration: none; white-space: nowrap;
+      }
+      main { max-width: 44rem; margin: 0 auto; padding: 28px 28px 96px; }
+      h1 { margin: 0 0 16px; font-size: clamp(30px, 6vw, 42px); line-height: 1.15; letter-spacing: -0.02em; }
+      h2 { margin: 56px 0 12px; font-size: 25px; line-height: 1.3; letter-spacing: -0.01em; color: var(--accent); }
+      h3 { margin: 28px 0 4px; font-size: 18px; }
+      p, ul { margin: 0 0 14px; }
+      ul { padding-left: 1.2em; }
+      li { margin-bottom: 6px; }
+      .lead { font-size: 20px; line-height: 1.55; color: var(--muted); }
+      .example {
+        margin: 20px 0; padding: 16px 20px; border: 1px solid var(--edge); border-radius: 12px;
+        background: var(--panel);
+      }
+      .example p { margin: 0; }
+      .amount { text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+      .share {
+        display: inline-block; margin-left: 0.35em; padding: 0 0.5em; border-radius: 999px;
+        background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent);
+        font-size: 0.74em; font-weight: 600; line-height: 1.55; vertical-align: 0.1em;
+      }
+      .total { color: var(--muted); }
+      .total b { color: var(--accent); }
+      .scroll { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 16px; }
+      th, td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--edge); text-align: left; vertical-align: top; }
+      th { white-space: nowrap; }
+      thead th { color: var(--muted); font-weight: 600; font-size: 14px; }
+      footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--edge); color: var(--muted); font-size: 15px; }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="/">smarText</a>
+      <a class="open" href="/">Open the editor</a>
+    </header>
+
+    <main>
+      <h1>How smarText adds up your notes</h1>
+      <p class="lead">
+        smarText is a free Markdown editor that reads the amounts in what you write and adds them up. There are no
+        formulas and no cells: you write a recipe, a mix or a shopping list the way you would on paper.
+      </p>
+
+      <div class="example" role="img" aria-label="Example: 46g cocoa powder, 55.4 percent, and 37g cocoa butter, 44.6 percent. 83 g in total.">
+        <p>
+          <span class="amount">46g</span><span class="share">55.4%</span> cocoa powder and
+          <span class="amount">37g</span><span class="share">44.6%</span> cocoa butter
+        </p>
+        <p class="total"><b>83 g</b> in total</p>
+      </div>
+
+      <h2>What counts as an amount</h2>
+      <p>
+        A number with a unit, a currency or a percent sign, anywhere in the text: <code>46g</code>,
+        <code>2 cups</code>, <code>45 minutes</code>, <code>$12.50</code>, <code>20%</code>. It can sit in a sentence,
+        a list item or a table cell.
+      </p>
+      <p>
+        A bare number is not an amount. "3 eggs" and "in 2024" are left alone, so ordinary writing doesn't turn into
+        sums by accident. Amounts in headings, code and links are left alone too.
+      </p>
+
+      <h2>What adds up together</h2>
+      <ul>
+        <li>Amounts on the same line add up, and so do the lines that follow, even across blank lines.</li>
+        <li>A heading, or a line with no amount in it, starts a new sum.</li>
+        <li>Each amount shows its share of the total as a small tag beside it.</li>
+        <li>The total appears under the last line of the sum.</li>
+      </ul>
+
+      <h2>Units that mix</h2>
+      <p>
+        Units of the same kind are converted and added together. "1 kg flour, 500 g butter and 20 g salt" comes to
+        1,520 g. "2 cups milk with 100 ml cream" comes to 2.42 cups. The total is shown in the unit you wrote most
+        often, or the first one when it's a tie.
+      </p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th scope="col">Kind</th><th scope="col">Units</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Weight</th><td>µg, mg, g, kg, tonne, oz, lb, stone</td></tr>
+            <tr><th scope="row">Volume</th><td>µl, ml, cl, dl, l, cm³, m³, tsp, tbsp, fl oz, cup, pint, quart, gallon</td></tr>
+            <tr><th scope="row">Length</th><td>mm, cm, m, km, inch, ft, yd, mile</td></tr>
+            <tr><th scope="row">Area</th><td>mm², cm², m², km², hectare, acre, sq ft</td></tr>
+            <tr><th scope="row">Time</th><td>ms, s, min, h, day, week</td></tr>
+            <tr><th scope="row">Energy</th><td>J, kJ, kcal, Wh, kWh</td></tr>
+            <tr><th scope="row">Power</th><td>W, kW, MW</td></tr>
+            <tr><th scope="row">Data</th><td>KB, MB, GB, TB</td></tr>
+            <tr><th scope="row">Pieces</th><td>pcs, dozen</td></tr>
+            <tr><th scope="row">Money</th><td>$, €, £, ¥, ₹ and currency codes such as USD, EUR and TND</td></tr>
+            <tr><th scope="row">Percentages</th><td>%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Full words work as well, such as "4 ounces" or "2 tablespoons". Each kind gets its own total, so one paragraph
+        can end with "1,520 g, 2.61 cups, and 140 min in total". Cups, spoons, pints and gallons are US measures, and
+        "cal" is the food calorie.
+      </p>
+
+      <h2>Scale a recipe by changing its total</h2>
+      <p>
+        Click a total, type the total you want and press Enter. Every amount in that sum is rewritten in proportion.
+        Change "83 g in total" to 500 and the line becomes "277g cocoa powder and 223g cocoa butter", with the same
+        shares as before.
+      </p>
+      <ul>
+        <li>Each amount keeps its own unit, so cups stay cups and milliliters stay milliliters.</li>
+        <li>Only that kind changes: a new weight leaves the baking time alone.</li>
+        <li>The whole change is one undo step.</li>
+      </ul>
+
+      <h2>What it's good for</h2>
+      <ul>
+        <li>Recipes and baker's percentages: doughs, chocolate, sauces, cocktails.</li>
+        <li>Formulas where proportions matter: soap, candles, resin, paint, plant feed.</li>
+        <li>Shopping lists and small budgets, per currency.</li>
+        <li>Workouts and schedules, where the minutes and hours add up.</li>
+        <li>Cutting lists and room sizes in metric or feet and inches.</li>
+      </ul>
+
+      <h2>Questions</h2>
+      <h3>Do I need to learn formulas or a special syntax?</h3>
+      <p>
+        No. Write a number with a unit anywhere in a sentence, a list or a table. smarText finds the amounts and adds
+        them up as you type.
+      </p>
+      <h3>Can I mix units such as kilograms and grams, or cups and milliliters?</h3>
+      <p>
+        Yes. Units of the same kind are converted and added together: 1 kg and 500 g make 1.5 kg, and 2 cups and
+        100 ml make 2.42 cups. Cups, spoons, pints and gallons are US measures.
+      </p>
+      <h3>How do I scale a recipe up or down?</h3>
+      <p>
+        Click the total, type the total you want and press Enter. Every amount in that sum is rewritten in proportion,
+        each in its own unit, and one undo puts them all back.
+      </p>
+      <h3>Does smarText change my text?</h3>
+      <p>
+        Not when it calculates. Shares and totals are drawn on top of the note and are not part of the Markdown. Your
+        text changes only when you change a total yourself.
+      </p>
+      <h3>Where is my note stored?</h3>
+      <p>In your browser, on your device. It is not sent to a server, and there is no account.</p>
+      <h3>Does it convert currencies?</h3>
+      <p>No. Each currency is added up on its own, so dollars and euros get separate totals.</p>
+
+      <footer>
+        <a href="/">Open the editor</a> and start writing. smarText is built on
+        <a href="https://github.com/Netherstone-HQ/nethermark" rel="noopener">nethermark</a>.
+      </footer>
+    </main>
+  </body>
+</html>

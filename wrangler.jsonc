@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "smartext",
+  "compatibility_date": "2026-11-01",
+  // No Worker code: Cloudflare serves the built pages in dist/ as static assets.
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

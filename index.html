@@ -3,22 +3,69 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>smarText</title>
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232b6a5b'/%3E%3Cpath d='M9 12.5h14M9 19.5h14' stroke='%23f6f5f2' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
+    <title>smarText: a Markdown editor that adds up what you write</title>
+    <meta
+      name="description"
+      content="Write a recipe, a mix or a list in plain text. smarText finds the amounts, mixes units like kg and g or cups and ml, shows each share and the total, and rescales everything when you change the total. Free, no account."
     />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+    <meta name="application-name" content="smarText" />
+    <meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141516" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="smarText" />
+    <meta property="og:title" content="smarText: a Markdown editor that adds up what you write" />
+    <meta
+      property="og:description"
+      content="Write amounts in plain text and see shares and totals as you type. Units mix, and changing a total rescales the whole recipe."
+    />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A line of text with two amounts, their shares and the total of 83 g" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap"
       rel="stylesheet"
     />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "smarText",
+        "url": "%VITE_SITE_URL%/",
+        "description": "A Markdown editor that finds the amounts in what you write, adds them up, shows each amount's share, and rescales them when you change the total.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "image": "%VITE_SITE_URL%/og.png",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "Finds amounts anywhere in plain text, lists and tables",
+          "Adds up weight, volume, length, area, time, energy, power, data and money",
+          "Mixes units of the same kind, such as kg and g or cups and ml",
+          "Shows each amount's share of the total",
+          "Rescales every amount when the total is changed",
+          "Markdown formatting with a toolbar and shortcuts",
+          "Notes stay in the browser, with no account"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="app">
       <!-- main.ts moves these around the editor once it's built. -->
-      <div class="brand">smarText</div>
+      <h1 class="brand">smarText</h1>
 
       <div class="actions">
         <button class="help-button" type="button" popovertarget="help">How sums work</button>
@@ -34,7 +81,7 @@
         <p class="help-note">
           Understood: weight, volume, length, area, time, energy, power, data, pieces, money and percentages. Cups,
           spoons, pints and gallons are US measures. Currencies are never exchanged, so dollars and euros add up
-          apart.
+          apart. <a href="/guide/">Read the full guide</a>
         </p>
       </div>
 
@@ -43,6 +90,18 @@
         <span id="words"></span>
       </footer>
     </div>
+
+    <noscript>
+      <div class="no-script">
+        <h1>smarText</h1>
+        <p>
+          smarText is a Markdown editor that adds up the amounts you write. Write "46g cocoa powder and 37g cocoa
+          butter" and it shows each share and "83 g in total". Units of the same kind mix, and changing a total
+          rescales every amount.
+        </p>
+        <p>The editor needs JavaScript. <a href="/guide/">Read how it works</a>.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

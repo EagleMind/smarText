@@ -44,9 +44,25 @@ body {
   font-family: var(--nme-font-family);
 }
 
+.no-script {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 48px 24px;
+  color: light-dark(#141516, #eeebe5);
+  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.no-script a,
+.help a {
+  color: light-dark(#2b6a5b, #8fd1be);
+  text-underline-offset: 3px;
+}
+
 .brand {
   grid-area: brand;
   align-self: center;
+  margin: 0;
+  line-height: 1.4;
   padding-inline-start: 20px;
   font-size: 17px;
   font-weight: 700;

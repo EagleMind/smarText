@@ -1,0 +1,13 @@
+{
+  "name": "smarText",
+  "short_name": "smarText",
+  "description": "A Markdown editor that adds up the amounts you write.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f5f2",
+  "theme_color": "#2b6a5b",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
